@@ -1,0 +1,47 @@
+{
+  "name": "express-app",
+  "version": "1.0.0",
+  "description": "\"A starter app for express backend server\"",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zahid-01/express-js-setup.git"
+  },
+  "author": "zahid01",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zahid-01/express-js-setup/issues"
+  },
+  "homepage": "https://github.com/zahid-01/express-js-setup#readme",
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^3.0.7",
+    "axios": "^1.7.8",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-session": "^1.18.1",
+    "googleapis": "^150.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.3",
+    "ngrok": "^5.0.0-beta.2",
+    "nodemailer": "^7.0.3",
+    "nodemon": "^3.1.4",
+    "passport": "^0.7.0",
+    "passport-apple": "^2.0.2",
+    "passport-azure-ad-oauth2": "^0.0.4",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-microsoft": "^2.1.0",
+    "sequelize": "^6.37.5",
+    "sharp": "^0.33.5",
+    "socket.io": "^4.7.5",
+    "twilio": "^5.3.5"
+  }
+}
