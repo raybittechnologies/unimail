@@ -25,7 +25,7 @@ AuthRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   function (req, res) {
-    res.redirect(`${process.env.PROD_URL}`);
+    res.redirect(`https://unimail.raybitprojects.com`);
     // res.redirect("http://localhost:5173");
   }
 );
@@ -40,7 +40,7 @@ AuthRouter.get(
   }),
   function (req, res) {
     // res.redirect("http://localhost:5173");
-    res.redirect(`${process.env.PROD_URL}`);
+    res.redirect(`https://unimail.raybitprojects.com`);
   }
 );
 
@@ -51,7 +51,7 @@ AuthRouter.post(
     failureRedirect: `${process.env.PROD_URL}`,
   }),
   function (req, res) {
-    res.redirect(`${process.env.PROD_URL}`);
+    res.redirect(`https://unimail.raybitprojects.com`);
   }
 );
 
