@@ -38,6 +38,7 @@ app.use(
       "http://localhost:3001",
       "http://localhost:5173",
       "https://rayapps.org",
+      "https://unimail.raybitprojects.com",
     ],
     credentials: true,
   })

@@ -25,7 +25,15 @@ AuthRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   function (req, res) {
-    res.redirect(`https://unimail.raybitprojects.com`);
+    res.send(`
+  <html>
+    <body>
+      <script>
+        window.location.href = "https://unimail.raybitprojects.com";
+      </script>
+    </body>
+  </html>
+`);
     // res.redirect("http://localhost:5173");
   }
 );
@@ -40,7 +48,15 @@ AuthRouter.get(
   }),
   function (req, res) {
     // res.redirect("http://localhost:5173");
-    res.redirect(`https://unimail.raybitprojects.com`);
+    res.send(`
+  <html>
+    <body>
+      <script>
+        window.location.href = "https://unimail.raybitprojects.com";
+      </script>
+    </body>
+  </html>
+`);
   }
 );
 
