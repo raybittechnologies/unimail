@@ -24,25 +24,35 @@ AuthRouter.get("/apple", appleAuthentication);
 AuthRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
+  function (req, res) {
     res.redirect(`${process.env.PROD_URL}`);
+    // res.redirect("http://localhost:5173");
   }
 );
+
+console.log(`${process.env.PROD_URL}`);
 
 AuthRouter.get(
   "/microsoft/callback",
   passport.authenticate("microsoft", {
-    successRedirect: `${process.env.PROD_URL}`,
+    // successRedirect: `${process.env.PROD_URL}`,
     failureRedirect: `${process.env.PROD_URL}`,
-  })
+  }),
+  function (req, res) {
+    // res.redirect("http://localhost:5173");
+    res.redirect(`${process.env.PROD_URL}`);
+  }
 );
 
 AuthRouter.post(
   "/apple/callback",
   passport.authenticate("apple", {
-    successRedirect: `${process.env.PROD_URL}`,
+    // successRedirect: `${process.env.PROD_URL}`,
     failureRedirect: `${process.env.PROD_URL}`,
-  })
+  }),
+  function (req, res) {
+    res.redirect(`${process.env.PROD_URL}`);
+  }
 );
 
 // IMAP Configuration Routes

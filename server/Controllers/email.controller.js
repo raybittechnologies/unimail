@@ -87,7 +87,7 @@ exports.sendEmail = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const user = await User.findOne({ where: { oauth_id: id } });
+    const user = await User.findOne({ where: { id } });
     if (!user || !user.oauth_access_token || user.oauth_provider !== "Google") {
       return res
         .status(404)
