@@ -15,12 +15,13 @@ const db = {};
 const associations = require("./Associations/index");
 
 db.User = require("./UserModel")(sequelize, DataTypes);
+// db.dummy = require("./USERDUMMY")(sequelize, DataTypes);
 associations(db);
 
 (async () => {
   try {
     await sequelize.authenticate();
-    // await sequelize.sync({ force: false });
+    await sequelize.sync({ force: false });
     // await db.User.sync({ force: true });
     console.log("DB Connection has been established successfully.");
   } catch (error) {

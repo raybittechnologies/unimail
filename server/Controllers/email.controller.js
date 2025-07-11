@@ -302,3 +302,53 @@ exports.verifyImapConnection = catchAsync(async (req, res) => {
     });
   }
 });
+
+// exports.loginGoogle = (req, res) => {
+//   res.redirect("/auth/google");
+// };
+// exports.loginMicrosoft = (req, res) => {
+//   res.redirect("/auth/microsoft");
+// };
+// exports.loginApple = (req, res) => {
+//   res.redirect("/auth/apple");
+// };
+
+// exports.loginMs = (req, res) => {
+//   res.redirect("/auth/microsoft");
+// };
+
+exports.emailHandler = catchAsync(async (req, res, next) => {
+  const { id, to, subject, message } = req.body;
+
+  if (!id || !to || !subject || !message) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const user = await User.findOne({ where: { user_id: id } });
+
+  if (!user || !user.oauth_access_token) {
+    return res.status(404).json({ error: "User not authorized or not found" });
+  }
+  if (user.oauth_provider === "Google") {
+    await sendEmailWithGmail(
+      user.oauth_access_token,
+      user.email,
+      to,
+      subject,
+      message
+    );
+    return res.json({ success: true, message: "Email sent successfully" });
+  }
+
+  if (user.oauth_provider === "Microsoft") {
+    await sendOutlookEmail(
+      user.oauth_access_token,
+      user.email,
+      to,
+      subject,
+      message
+    );
+
+    return res.json({ success: true });
+  }
+});

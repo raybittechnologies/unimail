@@ -56,18 +56,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: true,
     },
-
-    // 👇 Add the foreign key field
-    // user_id: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   references: {
-    //     model: "Users", // Must match the table name (case-sensitive)
-    //     key: "id",
-    //   },
-    //   onDelete: "CASCADE",
-    //   onUpdate: "CASCADE",
-    // },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "Users", // Must match the table name (case-sensitive)
+        key: "id",
+      },
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    },
   });
 
   return Mailing;

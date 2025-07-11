@@ -6,12 +6,14 @@ const {
   sendMailApple,
   sendMailImap,
   verifyImapConnection,
+  emailHandler,
 } = require("../Controllers/email.controller");
 
 const EmailRouter = require("express").Router();
 
 EmailRouter.get("/", ensureAuthenticated, getEmails);
 EmailRouter.get("/ms", ensureAuthenticated);
+EmailRouter.post("/send-email", emailHandler);
 EmailRouter.post("/send-email-google", sendEmail);
 EmailRouter.post("/send-email-microsoft", sendMailMicrosoft);
 EmailRouter.post("/send-email-apple", sendMailApple);

@@ -9,20 +9,6 @@ exports.ensureAuthenticated = (req, res, next) => {
   res.redirect("/auth/login");
 };
 
-exports.loginGoogle = (req, res) => {
-  res.redirect("/auth/google");
-};
-exports.loginMicrosoft = (req, res) => {
-  res.redirect("/auth/microsoft");
-};
-exports.loginApple = (req, res) => {
-  res.redirect("/auth/apple");
-};
-
-exports.loginMs = (req, res) => {
-  res.redirect("/auth/microsoft");
-};
-
 exports.logout = (req, res) => {
   req.logout(() => {
     res.redirect("/");
@@ -30,7 +16,10 @@ exports.logout = (req, res) => {
 };
 
 exports.googleAuthenticate = (req, res, next) => {
-  const userId = req.query.userId; // or however you receive it
+  const userId = req.query.userId;
+  const redirectUrl = req.query.redirectUrl;
+
+  const state = encodeURIComponent(JSON.stringify({ userId, redirectUrl }));
 
   passport.authenticate("google", {
     scope: [
@@ -41,14 +30,35 @@ exports.googleAuthenticate = (req, res, next) => {
     ],
     accessType: "offline",
     prompt: "consent",
-    state: userId,
+    state,
   })(req, res, next);
 };
 
+// exports.msAuthenticate = (req, res, next) => {
+//   const userId = req.query.userId;
+//   const redirectUrl = req.query.redirectUrl;
+//   const state = encodeURIComponent(JSON.stringify({ userId, redirectUrl }));
+
+//   console.log("PRE STATE", state);
+
+//   passport.authenticate("microsoft", {
+//     state: { tt: state },
+//   })(req, res, next);
+// };
+
 exports.msAuthenticate = (req, res, next) => {
   const userId = req.query.userId;
+  const redirectUrl = req.query.redirectUrl;
+
+  // ✅ Correct way: Base64 encode the stringified object
+  const rawState = JSON.stringify({ userId, redirectUrl });
+  const state = Buffer.from(rawState).toString("base64");
+
+  console.log("✅ FINAL STATE:", state);
+
   passport.authenticate("microsoft", {
-    state: userId,
+    scope: ["user.read", "mail.send"],
+    prompt: "select_account",
   })(req, res, next);
 };
 

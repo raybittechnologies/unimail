@@ -19,9 +19,20 @@ passport.use(
       passReqToCallback: true, // 👈 Needed to access `req.query.state`
     },
     async (req, accessToken, refreshToken, profile, done) => {
-      console.log(profile.emails[0].value);
+      let userId = null;
+
+      try {
+        const state = req.query.state;
+        const parsedState = JSON.parse(decodeURIComponent(state));
+        userId = parsedState.userId;
+      } catch (err) {
+        console.error("Error parsing state in strategy:", err);
+      }
+
       try {
         let user = await User.findOne({ where: { oauth_id: profile.id } });
+
+        console.log("This is user", user);
 
         // If user doesn't exist, create a new one
         if (!user) {
@@ -31,7 +42,10 @@ passport.use(
             oauth_access_token: accessToken,
             oauth_refresh_token: refreshToken,
             email: profile.emails[0].value,
+            user_id: userId,
           });
+
+          console.log(user);
         } else {
           // Update existing user's OAuth details
           await user.update({
@@ -41,9 +55,9 @@ passport.use(
             oauth_refresh_token: refreshToken,
           });
         }
-        done(null, user);
+        return done(null, user);
       } catch (err) {
-        done(err, null);
+        return done(err, null);
       }
     }
   )
@@ -81,6 +95,16 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, accessToken, refreshToken, profile, done) => {
+      // console.log("This is the state zahid", JSON.pareq.query.state);
+      // let userId = null;
+
+      // try {
+      //   const state = req.query.state;
+      //   const parsedState = JSON.parse(decodeURIComponent(state));
+      //   userId = parsedState.userId;
+      // } catch (err) {
+      //   console.error("Error parsing state in strategy:", err);
+      // }
       try {
         let user = await User.findOne({ where: { oauth_id: profile.id } });
 
@@ -91,6 +115,7 @@ passport.use(
             oauth_access_token: accessToken ? accessToken : "abc",
             oauth_refresh_token: refreshToken ? refreshToken : "abc",
             email: profile.emails[0].value,
+            user_id: "1",
           });
         } else {
           await user.update({
@@ -99,11 +124,13 @@ passport.use(
             oauth_access_token: accessToken,
             oauth_refresh_token: refreshToken,
           });
+
+          console.log("This is user", user);
         }
 
-        done(null, user);
+        return done(null, user);
       } catch (err) {
-        done(err, null);
+        return done(err, null);
       }
     }
   )
@@ -152,7 +179,7 @@ passport.use(
 
         return done(null, user);
       } catch (err) {
-        done(err, null);
+        return done(err, null);
       }
     }
   )

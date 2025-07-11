@@ -2,8 +2,10 @@ import { useState } from "react";
 import "./Login.css";
 import axios from "axios";
 import { BASE_URI } from "../../network/baseurl";
+import { useSearchParams } from "react-router-dom";
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     smtp_host: "",
@@ -14,8 +16,18 @@ const Login = () => {
     smtp_require_tls: true,
   });
 
+  const userId = searchParams.get("userId");
+  const redirectUrl = searchParams.get("redirectUrl");
+
+  // const handleLogin = (provider) => {
+  //   const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
+  //   window.location.href = `${BASE_URI}/auth/login/${provider}?${queryString}`;
+  // };
+
   const handleLogin = (provider) => {
-    window.location.href = `${BASE_URI}/auth/login/${provider}`;
+    const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
+    console.log(queryString);
+    window.location.href = `${BASE_URI}/auth/login/${provider}?${queryString}`;
   };
 
   const handleChange = (e) => {
