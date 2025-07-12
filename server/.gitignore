@@ -1,8 +1,0 @@
-node_modules
-config.env
-.env
-/.env
-./.env
-
-certs
-/certs
