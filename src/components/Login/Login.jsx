@@ -7,6 +7,8 @@ import { useSearchParams } from "react-router-dom";
 const Login = () => {
   const [searchParams] = useSearchParams();
   const [showModal, setShowModal] = useState(false);
+  const userId = searchParams.get("userId");
+  const redirectUrl = searchParams.get("redirectUrl");
   const [formData, setFormData] = useState({
     smtp_host: "",
     smtp_port: "",
@@ -14,10 +16,8 @@ const Login = () => {
     smtp_password: "",
     smtp_secure: false,
     smtp_require_tls: true,
+    userId,
   });
-
-  const userId = searchParams.get("userId");
-  const redirectUrl = searchParams.get("redirectUrl");
 
   // const handleLogin = (provider) => {
   //   const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
