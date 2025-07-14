@@ -41,10 +41,11 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("SMTP Config Submitted:", formData);
+    const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
     // You can now send this to your backend using fetch or axios
     axios({
       method: "POST",
-      url: `${BASE_URI}/auth/imap-user`,
+      url: `${BASE_URI}/auth/imap-user?${queryString}`,
       data: {
         smtp_host: formData.smtp_host,
         smtp_username: formData.smtp_username,
