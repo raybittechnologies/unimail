@@ -53,6 +53,8 @@ const Login = () => {
         smtp_port: formData.smtp_port,
       },
     }).then(() => {
+      //Redirect
+
       window.location.href = redirectUrl;
     });
     setShowModal(false);
