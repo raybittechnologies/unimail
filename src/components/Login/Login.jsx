@@ -52,8 +52,8 @@ const Login = () => {
         smtp_password: formData.smtp_password,
         smtp_port: formData.smtp_port,
       },
-    }).then((res) => {
-      console.log(res);
+    }).then(() => {
+      window.location.href = redirectUrl;
     });
     setShowModal(false);
   };
