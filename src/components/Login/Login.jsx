@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 const Login = () => {
   const [searchParams] = useSearchParams();
-  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(null);
   const userId = searchParams.get("userId");
   const redirectUrl = searchParams.get("redirectUrl");
   const [formData, setFormData] = useState({
@@ -40,24 +40,49 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("SMTP Config Submitted:", formData);
-    const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
-    // You can now send this to your backend using fetch or axios
-    axios({
-      method: "POST",
-      url: `${BASE_URI}/auth/imap-user?${queryString}`,
-      data: {
-        smtp_host: formData.smtp_host,
-        smtp_username: formData.smtp_username,
-        smtp_password: formData.smtp_password,
-        smtp_port: formData.smtp_port,
-      },
-    }).then(() => {
-      //Redirect
 
-      window.location.href = redirectUrl;
-    });
-    setShowModal(false);
+    const queryString = new URLSearchParams({ userId, redirectUrl }).toString();
+
+    if (modalType === "smtp") {
+      console.log("SMTP Config Submitted:", formData);
+      axios({
+        method: "POST",
+        url: `${BASE_URI}/auth/imap-user?${queryString}`,
+        data: {
+          smtp_host: formData.smtp_host,
+          smtp_username: formData.smtp_username,
+          smtp_password: formData.smtp_password,
+          smtp_port: formData.smtp_port,
+        },
+      }).then(() => {
+        //Redirect
+
+        window.location.href = redirectUrl;
+      });
+      setModalType(false);
+    }
+
+    if (modalType === "apple") {
+      console.log("Apple Config Submitted:", formData);
+      const queryString = new URLSearchParams({
+        userId,
+        redirectUrl,
+      }).toString();
+      // You can now send this to your backend using fetch or axios
+      axios({
+        method: "POST",
+        url: `${BASE_URI}/auth/apple-password?${queryString}`,
+        data: {
+          email: formData.smtp_username,
+          appPassword: formData.smtp_password,
+        },
+      }).then(() => {
+        //Redirect
+
+        window.location.href = redirectUrl;
+      });
+      setModalType(false);
+    }
   };
 
   return (
@@ -83,7 +108,8 @@ const Login = () => {
       </button>
 
       <button
-        onClick={() => handleLogin("apple")}
+        // onClick={() => handleLogin("apple")}
+        onClick={() => setModalType("apple")}
         className="login-button black"
       >
         <img
@@ -94,7 +120,10 @@ const Login = () => {
         <span>Continue with Apple</span>
       </button>
 
-      <button onClick={() => setShowModal(true)} className="login-button blue">
+      <button
+        onClick={() => setModalType("smtp")}
+        className="login-button blue"
+      >
         <img
           src="https://www.svgrepo.com/show/374079/email.svg"
           alt="SMTP"
@@ -103,31 +132,38 @@ const Login = () => {
         <span>Configure SMTP</span>
       </button>
 
-      {showModal && (
+      {modalType && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>SMTP Configuration</h2>
+            <h2>
+              {modalType === "apple" ? "Apple Login" : "SMTP Configuration"}
+            </h2>
             <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="smtp_host"
-                placeholder="SMTP Host"
-                value={formData.smtp_host}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="number"
-                name="smtp_port"
-                placeholder="SMTP Port"
-                value={formData.smtp_port}
-                onChange={handleChange}
-                required
-              />
+              {modalType === "smtp" && (
+                <>
+                  <input
+                    type="text"
+                    name="smtp_host"
+                    placeholder="SMTP Host"
+                    value={formData.smtp_host}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="smtp_port"
+                    placeholder="SMTP Port"
+                    value={formData.smtp_port}
+                    onChange={handleChange}
+                    required
+                  />
+                </>
+              )}
+
               <input
                 type="text"
                 name="smtp_username"
-                placeholder="SMTP Username"
+                placeholder="Username"
                 value={formData.smtp_username}
                 onChange={handleChange}
                 required
@@ -135,34 +171,38 @@ const Login = () => {
               <input
                 type="password"
                 name="smtp_password"
-                placeholder="SMTP Password"
+                placeholder="Password"
                 value={formData.smtp_password}
                 onChange={handleChange}
                 required
               />
-              <label>
-                <input
-                  type="checkbox"
-                  name="smtp_secure"
-                  checked={formData.smtp_secure}
-                  onChange={handleChange}
-                />
-                Use Secure Connection (SSL)
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="smtp_require_tls"
-                  checked={formData.smtp_require_tls}
-                  onChange={handleChange}
-                />
-                Require TLS
-              </label>
+
+              {modalType === "smtp" && (
+                <>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="smtp_secure"
+                      checked={formData.smtp_secure}
+                      onChange={handleChange}
+                    />
+                    Use Secure Connection (SSL)
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="smtp_require_tls"
+                      checked={formData.smtp_require_tls}
+                      onChange={handleChange}
+                    />
+                    Require TLS
+                  </label>
+                </>
+              )}
+
               <div className="modal-actions">
-                <button type="submit" onClick={handleSubmit}>
-                  Save
-                </button>
-                <button type="button" onClick={() => setShowModal(false)}>
+                <button type="submit">Save</button>
+                <button type="button" onClick={() => setModalType(null)}>
                   Cancel
                 </button>
               </div>
